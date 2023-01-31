@@ -4,7 +4,7 @@ definePageMeta({
   layout: "material"
 })
 
-const { data: product, error } = await useFetch(`https://dummyjson.com/products/${route.params.id}`)
+const { data: user, error } = await useFetch(`https://dummyjson.com/users/${route.params.id}`)
 
 </script>
 
@@ -14,14 +14,14 @@ const { data: product, error } = await useFetch(`https://dummyjson.com/products/
 
     <div class="overflow-auto">
 
-      <img class="w-full object-fit" :src="product.thumbnail" alt="">
+      <img class="w-[200px] object-fit" :src="user.image" alt="">
 
       <div class="p-4 flex justify-between">
         <div>
-          <h2 class="text-3xl">{{ product.title }}</h2>
-          <p>{{ product.description }}</p>
+          <h2 class="text-3xl">{{ user.firstName }} {{ user.lastName }}</h2>
+          <p>{{ user.email }}</p>
         </div>
-        <h3 class="text-xl font-semibold">{{ product.price }} €</h3>
+        <h3 class="text-xl font-semibold">{{ user.phone }}</h3>
       </div>
     </div>
   </div>
