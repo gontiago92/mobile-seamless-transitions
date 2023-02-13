@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
-  layout: "material"
+  layout: "material",
+  nav: { title: "Dashboard", icon: "tabler:world-www" }
 })
 </script>
 
