@@ -1,20 +1,23 @@
 <script lang="ts" setup>
-const route = useRoute()
+const route = useRoute();
 definePageMeta({
-  layout: "material"
-})
+  layout: "material",
+});
 
-const { data: user, error } = await useFetch(`https://dummyjson.com/users/${route.params.id}`)
-
+const { data: user, error } = await useFetch(
+  `https://dummyjson.com/users/${route.params.id}`
+);
 </script>
 
 <template>
-  <div  class="overflow-hidden h-full flex flex-col pb-6">
-    <page-tool-bar can-go-back  />
+  <div class="overflow-hidden h-full flex flex-col pb-6">
+    <page-tool-bar
+      can-go-back
+      :pageTitle="`${user.firstName} ${user.lastName}`"
+    />
 
     <div class="overflow-auto">
-
-      <img class="w-[200px] object-fit" :src="user.image" alt="">
+      <img class="w-[200px] object-fit" :src="user.image" alt="" />
 
       <div class="p-4 flex justify-between">
         <div>

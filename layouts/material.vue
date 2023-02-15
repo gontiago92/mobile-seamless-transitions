@@ -7,6 +7,7 @@ const theme = useTheme();
 
 const router = useRouter();
 const drawer = ref(false);
+const rail = ref(true);
 
 //const toggleTheme = () => theme.value = theme.value === 'light' ? 'dark' : 'light'
 
@@ -21,8 +22,14 @@ const navLinks = computed(() =>
     .filter((route) => route.meta.nav && !route.path?.includes("tenant"))
 );
 
-const test = () => {
-  drawer.value = true;
+const toggleNavigationDrawer = () => {
+  if (xs.value) {
+    drawer.value = !drawer.value;
+  }
+
+  if (mobile.value && !xs.value) {
+    rail.value = !rail.value;
+  }
   console.log("here");
 };
 </script>
@@ -31,7 +38,7 @@ const test = () => {
   <v-app id="inspire">
     <v-navigation-drawer
       v-model="drawer"
-      :rail="mobile && !xs"
+      :rail="mobile && !xs && rail"
       :permanent="!xs"
       rail-width="80"
       class="py-6 px-3"
@@ -39,39 +46,31 @@ const test = () => {
     >
       <div
         class="d-flex w-100"
-        :class="[mobile && !xs ? 'justify-center' : 'justify-space-between']"
+        :class="[
+          mobile && !xs && rail ? 'justify-center' : 'justify-space-between',
+        ]"
         style="white-space: nowrap"
       >
         <transition name="textSlide" mode="out-in">
-          <h3 v-if="!mobile || xs">Management Tool</h3>
+          <h3 v-if="!rail || !mobile || xs">Management Tool</h3>
         </transition>
-        <Icon v-if="mobile && !xs" name="line-md:menu" size="24" class="mb-4" />
         <Icon
-          v-if="!mobile || xs"
+          v-if="rail && mobile && !xs"
+          name="line-md:menu"
+          size="24"
+          class="mb-4"
+          @click="toggleNavigationDrawer"
+        />
+        <Icon
+          v-if="!rail || !mobile || xs"
           name="line-md:menu-unfold-left"
           size="24"
           class="mb-4"
+          @click="toggleNavigationDrawer"
         />
       </div>
 
-      <v-btn
-        v-if="mobile && !xs"
-        icon="mdi-plus"
-        @click="toggleTheme"
-        rounded="lg"
-        size="56"
-        class="mb-16"
-      ></v-btn>
-      <v-btn
-        v-if="!mobile"
-        prepend-icon="mdi-plus"
-        @click="toggleTheme"
-        rounded="lg"
-        height="56"
-        class="w-100 mb-16"
-      >
-        Ajouter
-      </v-btn>
+      <TestFab v-if="!xs" />
 
       <v-list v-if="!$route.path.includes('tenants')" density="compact" nav>
         <template v-for="routeLink in navLinks" :key="routeLink.name">
@@ -132,6 +131,7 @@ const test = () => {
           </v-list-group>
         </template>
       </v-list>
+      <v-btn @click="toggleTheme">theme</v-btn>
     </v-navigation-drawer>
 
     <v-app-bar v-if="false">
@@ -145,24 +145,9 @@ const test = () => {
     </v-app-bar>
 
     <v-main class="w-100 h-100 py-4 bg-background">
-      <v-card class="pa-4 h-100 bg-transparent" elevation="0" rounded="xl">
-        <v-card
-          color="surface-variant"
-          elevation="3"
-          class="rounded-pill px-4 py-2 d-flex justify-space-between align-center"
-          max-width="720"
-        >
-          <Icon name="line-md:menu" size="24" @click="test" />
-          <input
-            type="text"
-            placeholder="Search"
-            class="px-4"
-            style="outline: 0; width: 100%"
-          />
-          <v-avatar color="surface-tint" size="32"></v-avatar>
-        </v-card>
-
-        <v-row>
+      <v-card class="mr-4 pa-4 h-100" elevation="0" rounded="xl">
+        <slot />
+        <!--      <v-row>
           <template v-for="n in 4" :key="n">
             <v-col class="mt-2" cols="12">
               <strong>Category {{ n }}</strong>
@@ -176,13 +161,22 @@ const test = () => {
               ></v-card>
             </v-col>
           </template>
-        </v-row>
+        </v-row> -->
       </v-card>
     </v-main>
+    <TestFab v-if="xs" />
   </v-app>
 </template>
 
 <style>
+.search {
+  background: rgba(var(--v-theme-primary), 0.05);
+}
+
+::placeholder {
+  color: rgba(var(--v-theme-primary), 0.7);
+}
+
 .textSlide-enter-active,
 .textSlide-leave-active {
   transition: opacity 0.3s linear;
