@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useTheme, useDisplay } from "vuetify";
+import { useStorage } from "@vueuse/core";
 
 const { xs, mobile } = useDisplay();
 //const theme = ref('dark')
@@ -32,6 +33,19 @@ const toggleNavigationDrawer = () => {
   }
   console.log("here");
 };
+const listItemSelected = ref();
+onMounted(() => {
+  listItemSelected.value = useStorage("listItemSelected", localStorage);
+});
+
+const goBack = () => {
+  const BrowserLocalStorage = useStorage("listItemSelected", localStorage);
+
+  BrowserLocalStorage.value.state = false;
+  BrowserLocalStorage.value.item = undefined;
+  BrowserLocalStorage.value.title = undefined;
+  router.go(-1);
+};
 </script>
 
 <template>
@@ -42,7 +56,7 @@ const toggleNavigationDrawer = () => {
       :permanent="!xs"
       rail-width="80"
       class="py-6 px-3"
-      border="0"
+      :border="0"
     >
       <div
         class="d-flex w-100"
@@ -134,18 +148,41 @@ const toggleNavigationDrawer = () => {
       <v-btn @click="toggleTheme">theme</v-btn>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="false">
+    <v-app-bar v-if="xs && listItemSelected">
       <template #prepend>
-        <v-btn variant="plain" size="24">
-          <Icon name="line-md:menu" size="24" @click="drawer = true" />
+        <v-btn
+          v-if="!listItemSelected.value.state"
+          variant="plain"
+          size="24"
+          @click="drawer = true"
+        >
+          <Icon name="line-md:menu" size="24" />
+        </v-btn>
+        <v-btn
+          v-if="listItemSelected.value.state"
+          variant="plain"
+          size="24"
+          @click="goBack"
+        >
+          <Icon name="line-md:arrow-left" size="24" />
         </v-btn>
       </template>
 
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title v-if="listItemSelected.value.title">
+        {{ listItemSelected.value.title }}
+      </v-toolbar-title>
+      <v-toolbar-title v-if="!listItemSelected.value.title"
+        >Application</v-toolbar-title
+      >
     </v-app-bar>
 
-    <v-main class="w-100 h-100 py-4 bg-background">
-      <v-card class="mr-4 pa-4 h-100" elevation="0" rounded="xl">
+    <v-main class="w-100 h-screen bg-background">
+      <v-card
+        class="h-100"
+        :class="[xs ? 'pa-0' : 'pa-4']"
+        elevation="0"
+        :rounded="[xs ? '0' : 'xl']"
+      >
         <slot />
         <!--      <v-row>
           <template v-for="n in 4" :key="n">
@@ -170,11 +207,12 @@ const toggleNavigationDrawer = () => {
 
 <style>
 .search {
-  background: rgba(var(--v-theme-primary), 0.05);
+  background: rgba(var(--v-theme-surface-tint), 0.11);
+  color: rgba(var(--v-theme-on-surface), 1);
 }
 
 ::placeholder {
-  color: rgba(var(--v-theme-primary), 0.7);
+  color: rgba(var(--v-theme-on-surface-variant), 1);
 }
 
 .textSlide-enter-active,
@@ -192,24 +230,23 @@ const toggleNavigationDrawer = () => {
 }
 
 .page-left-enter-active,
-.page-right-enter-active,
+.page-right-enter-active {
+  transition: all 0.4s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
 .page-left-leave-active,
 .page-right-leave-active {
-  transition: all 0.4s ease-in;
+  transition: all 0.2s cubic-bezier(0.3, 0, 0.8, 0.15);
 }
 
 .page-left-enter-from,
 .page-right-leave-to {
   transform: translateX(100%);
+  opacity: 0;
 }
 
 .page-left-leave-to,
 .page-right-enter-from {
   transform: translateX(-100%);
-}
-
-.page-left-enter-to,
-.page-right-enter-to {
-  transform: translateX(0);
 }
 </style>

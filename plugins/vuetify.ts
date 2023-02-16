@@ -45,7 +45,7 @@ const light: ThemeDefinition = {
   },
 };
 
-const dark: ThemeDefinition = {
+/* const dark: ThemeDefinition = {
   dark: true,
   colors: {
     primary: "#79d1ff",
@@ -60,6 +60,42 @@ const dark: ThemeDefinition = {
     "on-tertiary": "#312c4c",
     "tertiary-container": "#484264",
     "on-tertiary-container": "#e6deff",
+    error: "#ffb4ab",
+    "error-container": "#93000a",
+    "on-error": "#690005",
+    "on-error-container": "#ffdad6",
+    background: "#191c1e",
+    "on-background": "#e1e2e5",
+    surface: "#191c1e",
+    "on-surface": "#e1e2e5",
+    "surface-variant": "#41484d",
+    "on-surface-variant": "#c0c7cd",
+    outline: "#8a9297",
+    "inverse-on-surface": "#191c1e",
+    "inverse-surface": "#e1e2e5",
+    "inverse-primary": "#006689",
+    shadow: "#000000",
+    "surface-tint": "#79d1ff",
+    "outline-variant": "#41484d",
+    scrim: "#000000",
+  },
+}; */
+
+const dark: ThemeDefinition = {
+  dark: true,
+  colors: {
+    primary: "#006689",
+    "on-primary": "#ffffff",
+    "primary-container": "#c3e8ff",
+    "on-primary-container": "#001e2c",
+    secondary: "#4e616d",
+    "on-secondary": "#ffffff",
+    "secondary-container": "#d1e5f4",
+    "on-secondary-container": "#091e28",
+    tertiary: "#605a7d",
+    "on-tertiary": "#ffffff",
+    "tertiary-container": "#e6deff",
+    "on-tertiary-container": "#1c1736",
     error: "#ffb4ab",
     "error-container": "#93000a",
     "on-error": "#690005",

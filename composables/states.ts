@@ -1,1 +1,2 @@
-export const useLastState = () => useState("lastState", () => null);
+export const useListState = () =>
+  useState("listState", () => ({ item: undefined, state: false }));

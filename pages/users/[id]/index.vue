@@ -10,7 +10,7 @@ const { data: user, error } = await useFetch(
 </script>
 
 <template>
-  <div class="overflow-hidden h-full flex flex-col pb-6">
+  <div v-if="user" class="overflow-hidden h-full flex flex-col pb-6">
     <page-tool-bar
       can-go-back
       :pageTitle="`${user.firstName} ${user.lastName}`"
